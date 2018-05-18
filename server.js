@@ -1,7 +1,7 @@
 //dependencies
 const express = require('express');
-bodyParser = require('body-parser');
-mysql = require('mysql');
+      bodyParser = require('body-parser');
+      mysql = require('mysql');
 
 var app = express();
 var expressHandlebars = require('express-handlebars');
