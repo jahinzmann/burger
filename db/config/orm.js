@@ -1,8 +1,8 @@
 const connection = require('connection.js');
 
 var orm = {
-    create: function(table name, column name, value name, callback) {
-        var queryString =
+    create: function(tableName, columnName1, columnName2, valueName, callback) {
+        var queryString = "INSERT INTO" + tableName + "(" + columnName1 + "," + columnName2 + ") VALUES (" + valueName + ", false);" 
         connection.query(queryString, function(error, result){
             if (error) {
                 throw error
@@ -10,11 +10,23 @@ var orm = {
             callback(result);
         });
     },
-    read: function(table name, callback){
-
+    read: function(tableName, callback){
+        var queryString = "SELECT * FROM" + tableName + ";"
+        connection.query(queryString, function(error, result){
+            if (error) {
+                throw error
+            }; 
+            callback(result);
+        });
     },
-    update: function(table name, column name, value name, callback){
-
+    update: function(tableName, columnName, valueName, callback){
+        var queryString = "UPDATE" + tableName + "SET" + columnName + "= false WHERE ID=" + valueName + ";"
+        connection.query(queryString, function(error, result){
+            if (error) {
+                throw error
+            }; 
+            callback(result);
+        });
     },
 }
 
