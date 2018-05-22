@@ -20,7 +20,7 @@ var orm = {
         });
     },
     update: function(tableName, columnName, valueName, callback){
-        var queryString = "UPDATE" + tableName + "SET" + columnName + "= false WHERE ID=" + valueName + ";"
+        var queryString = "UPDATE" + tableName + "SET" + columnName + "= true WHERE ID=" + valueName + ";"
         connection.query(queryString, function(error, result){
             if (error) {
                 throw error
