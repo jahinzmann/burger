@@ -1,63 +1,54 @@
-//Routes
-
 var express = require("express");
+var bodyparser = require("body-parser");
+// var app = express.app();
 
-var router = express.Router();
+// Import the model (burger.js) to use its database functions.
+var burger = require("../models/burger.js");
 
-// Import the model (cat.js) to use its database functions.
-var cat = require("../models/cat.js");
+//Routes
+module.exports = function(app) {
 
-// Create all our routes and set up logic within those routes where required.
-router.get("/", function(req, res) {
-  cat.all(function(data) {
-    var hbsObject = {
-      cats: data
-    };
-    console.log(hbsObject);
-    res.render("index", hbsObject);
-  });
-});
 
-router.post("/api/cats", function(req, res) {
-  cat.create([
-    "name", "sleepy"
-  ], [
-    req.body.name, req.body.sleepy
-  ], function(result) {
-    // Send back the ID of the new quote
-    res.json({ id: result.insertId });
-  });
-});
 
-router.put("/api/cats/:id", function(req, res) {
-  var condition = "id = " + req.params.id;
+    // Create all our routes and set up logic within those routes where required.
+    app.get("/", function(req, res) {
+        orm.read('burger').then(function(data) {
+            result.render('index' {
+                burgers: data,
+                helpers: {
+                    isEaten: function(burger) {
+                        if (burger.devoured === true) {
+                            return "#" + burger.id + '' + burger.burgerName;
+                        } else {
+                            return;
+                        }
+                    }
+                },
 
-  console.log("condition", condition);
 
-  cat.update({
-    sleepy: req.body.sleepy
-  }, condition, function(result) {
-    if (result.changedRows == 0) {
-      // If no rows were changed, then the ID must not exist, so 404
-      return res.status(404).end();
-    } else {
-      res.status(200).end();
-    }
-  });
-});
+            });
+        })
+    });
 
-router.delete("/api/cats/:id", function(req, res) {
-  var condition = "id = " + req.params.id;
+    app.post("/create", function(req, res) {
+        orm.create('burgers', {
+            burger_name: req.body.burger,
+            devoured: false
+        }).then(function(data) {});
+    });
 
-  cat.delete(condition, function(result) {
-    if (result.affectedRows == 0) {
-      // If no rows were changed, then the ID must not exist, so 404
-      return res.status(404).end();
-    } else {
-      res.status(200).end();
-    }
-  });
-});
 
-// Export routes for server.js to use.
-module.exports = router;
+    app.get("/newBurger", function(req, res) {
+        orm.create('burgers').then(function(data) {
+            result.send(data);
+        })
+    });
+
+
+    app.get('/isEaten', function(req, res) {
+        orm.update('burgers', 'devoured', 'id', req.body.id).then(function(data) {});
+    });
+
+
+
+}; //end module.exports
